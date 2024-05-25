@@ -19,8 +19,18 @@ public class UserDataService {
 		return true;
 	}
 	
-	public void update(User user) {
+	public boolean update(int id, String name, long number, String email) {
+		User user = repo.findById(id).get();
+		if(user == null) {
+			return false;
+		}
+		user.setName(name);
+		user.setNumber(number);
+		user.setEmail(email);
+		
 		repo.save(user);
+		
+		return true;
 	}
 	
 	public boolean delete(int id) {
