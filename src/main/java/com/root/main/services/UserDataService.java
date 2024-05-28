@@ -46,4 +46,9 @@ public class UserDataService {
 		return userList;
 	}
 	
+	public Iterable<User> getAll(){
+		Iterable<User> userList = repo.findAll();
+		return userList;
+	}
+	
 }
