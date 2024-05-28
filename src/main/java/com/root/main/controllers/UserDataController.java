@@ -2,10 +2,12 @@ package com.root.main.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,6 +18,7 @@ import com.root.main.models.User;
 import com.root.main.services.UserDataService;
 
 @RestController
+@RequestMapping("/api/v1")
 public class UserDataController {
 	
 	@Autowired
@@ -23,6 +26,7 @@ public class UserDataController {
 
 	
 
+	@CrossOrigin(origins = "http://localhost:5173/")
 	@PostMapping("/create")
 	public ResponseMessage create(@RequestParam("name") String name, @RequestParam("number") long number,
 			@RequestParam("email") String email) {
@@ -47,6 +51,7 @@ public class UserDataController {
 		return responseMessage;
 	}
 	
+	@CrossOrigin(origins = "http://localhost:5173/allusrs")
 	@DeleteMapping("/delete")
 	public ResponseMessage delete(@RequestParam("id") int id) {
 		
@@ -65,6 +70,7 @@ public class UserDataController {
 		return responseMessage;
 	}
 	
+	@CrossOrigin(origins = "http://localhost:5173/")
 	@PutMapping("/update")
 	public ResponseMessage update(@RequestParam("id") int id, @RequestParam("name") String name, @RequestParam("number") long number,
 			@RequestParam("email") String email) {
@@ -84,6 +90,7 @@ public class UserDataController {
 		return responseMessage;
 	}
 	
+	@CrossOrigin(origins = "http://localhost:5173/")
 	@GetMapping("/getByName")
 	public List<User> getByName(@RequestParam("name") String name){
 		
@@ -91,4 +98,12 @@ public class UserDataController {
 		
 		return list;
 	}
+	
+	@CrossOrigin(origins = "http://localhost:5173/")
+	@GetMapping("/getall")
+	public Iterable<User> getAll(){
+		Iterable<User> userList = service.getAll();
+		return userList;
+	}
+	
 }

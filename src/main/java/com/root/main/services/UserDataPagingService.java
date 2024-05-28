@@ -26,6 +26,7 @@ public class UserDataPagingService {
 			session.setAttribute("page", page);
 		}else {
 			page++;
+			session.setAttribute("page", page);
 		}
 		
 		List<User> userList = repo.findAll(PageRequest.of(page, 5)).getContent();
