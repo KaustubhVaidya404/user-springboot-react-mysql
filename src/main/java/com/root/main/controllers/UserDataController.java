@@ -2,8 +2,10 @@ package com.root.main.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+import com.root.main.exceptions.UserNotFoundException;
+import com.root.main.models.ErrorDetail;
 import com.root.main.models.ResponseMessage;
 import com.root.main.models.User;
 import com.root.main.services.UserDataService;
@@ -51,7 +55,7 @@ public class UserDataController {
 		return responseMessage;
 	}
 	
-	@CrossOrigin(origins = "http://localhost:5173/allusrs")
+	@CrossOrigin(origins = "http://localhost:5173/allusers/")
 	@DeleteMapping("/delete")
 	public ResponseMessage delete(@RequestParam("id") int id) {
 		
@@ -63,8 +67,7 @@ public class UserDataController {
 			responseMessage.setMessage("Record Deleted");
 			responseMessage.setStatus(HttpStatus.NO_CONTENT);
 		}else {
-			responseMessage.setMessage("Error");
-			responseMessage.setStatus(HttpStatus.NOT_FOUND);
+			throw new UserNotFoundException();
 		}
 		
 		return responseMessage;
@@ -105,5 +108,13 @@ public class UserDataController {
 		Iterable<User> userList = service.getAll();
 		return userList;
 	}
+	
+	@ExceptionHandler(UserNotFoundException.class)
+	public ResponseEntity<ErrorDetail> handleUserNotFoundException(Exception exception) {
+		ErrorDetail error = new ErrorDetail("Enter user doesnot exisit", HttpStatus.NOT_FOUND);
+		ResponseEntity<ErrorDetail> rs = new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+		return rs;
+	}
+	
 	
 }
